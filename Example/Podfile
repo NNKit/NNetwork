@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'NNetwork_Example' do
+  pod 'NNetwork', :path => '../'
+
+  target 'NNetwork_Tests' do
+    inherit! :search_paths
+
+    pod 'Kiwi'
+  end
+end
