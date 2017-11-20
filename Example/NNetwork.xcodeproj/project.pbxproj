@@ -19,10 +19,15 @@
 		6003F5B1195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F5B2195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
 		6003F5BA195388D20070C39A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5B8195388D20070C39A /* InfoPlist.strings */; };
-		6003F5BC195388D20070C39A /* Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F5BB195388D20070C39A /* Tests.m */; };
 		71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 71719F9D1E33DC2100824A3D /* LaunchScreen.storyboard */; };
 		7A39CCD706DE72EEEF232585 /* Pods_NNetwork_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B327AE4165BCACD77CB0A7D /* Pods_NNetwork_Tests.framework */; };
 		873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 873B8AEA1B1F5CCA007FD442 /* Main.storyboard */; };
+		974D45361FBD886A005AA102 /* NNURLRequestCacheSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 974D45351FBD886A005AA102 /* NNURLRequestCacheSpec.m */; };
+		9755E4061FBD9366002A53E1 /* NNURLRequestPrivateSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 9755E4051FBD9366002A53E1 /* NNURLRequestPrivateSpec.m */; };
+		9755E40F1FBE7B25002A53E1 /* NNReachabililtySpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 9755E40E1FBE7B25002A53E1 /* NNReachabililtySpec.m */; };
+		9793E5521FBD3091005BBD13 /* NNTestAgent.m in Sources */ = {isa = PBXBuildFile; fileRef = 9793E5511FBD3091005BBD13 /* NNTestAgent.m */; };
+		9793E5541FBD326B005BBD13 /* NNURLRequestSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 9793E5531FBD326B005BBD13 /* NNURLRequestSpec.m */; };
+		97983EC31FBD40A60051B34E /* NNTestResponseReformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 97983EC21FBD40A60051B34E /* NNTestResponseReformer.m */; };
 		AFC766B847D9FD39B2ACC32C /* Pods_NNetwork_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7E493AD308C2FEA2611C56D /* Pods_NNetwork_Example.framework */; };
 /* End PBXBuildFile section */
 
@@ -39,7 +44,7 @@
 /* Begin PBXFileReference section */
 		0B951337897CECF44A1EC26E /* Pods-NNetwork_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NNetwork_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-NNetwork_Tests/Pods-NNetwork_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		0E0C85B3118E1D30B726516D /* Pods-NNetwork_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NNetwork_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-NNetwork_Example/Pods-NNetwork_Example.debug.xcconfig"; sourceTree = "<group>"; };
-		5B2FECF28C3B0453FDE441D8 /* NNetwork.podspec */ = {isa = PBXFileReference; includeInIndex = 1; name = NNetwork.podspec; path = ../NNetwork.podspec; sourceTree = "<group>"; };
+		5B2FECF28C3B0453FDE441D8 /* NNetwork.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = NNetwork.podspec; path = ../NNetwork.podspec; sourceTree = "<group>"; };
 		5B327AE4165BCACD77CB0A7D /* Pods_NNetwork_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NNetwork_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F58A195388D20070C39A /* NNetwork_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NNetwork_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F58D195388D20070C39A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -58,14 +63,21 @@
 		6003F5AF195388D20070C39A /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		6003F5B7195388D20070C39A /* Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Tests-Info.plist"; sourceTree = "<group>"; };
 		6003F5B9195388D20070C39A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		6003F5BB195388D20070C39A /* Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Tests.m; sourceTree = "<group>"; };
 		606FC2411953D9B200FFA9A0 /* Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Tests-Prefix.pch"; sourceTree = "<group>"; };
 		71719F9E1E33DC2100824A3D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		77336CACFC982D0ACC39BA64 /* Pods-NNetwork_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NNetwork_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-NNetwork_Tests/Pods-NNetwork_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		873B8AEA1B1F5CCA007FD442 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		974D45351FBD886A005AA102 /* NNURLRequestCacheSpec.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NNURLRequestCacheSpec.m; sourceTree = "<group>"; };
+		9755E4051FBD9366002A53E1 /* NNURLRequestPrivateSpec.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NNURLRequestPrivateSpec.m; sourceTree = "<group>"; };
+		9755E40E1FBE7B25002A53E1 /* NNReachabililtySpec.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NNReachabililtySpec.m; sourceTree = "<group>"; };
+		9793E5501FBD3091005BBD13 /* NNTestAgent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NNTestAgent.h; sourceTree = "<group>"; };
+		9793E5511FBD3091005BBD13 /* NNTestAgent.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NNTestAgent.m; sourceTree = "<group>"; };
+		9793E5531FBD326B005BBD13 /* NNURLRequestSpec.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NNURLRequestSpec.m; sourceTree = "<group>"; };
+		97983EC11FBD40A60051B34E /* NNTestResponseReformer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NNTestResponseReformer.h; sourceTree = "<group>"; };
+		97983EC21FBD40A60051B34E /* NNTestResponseReformer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NNTestResponseReformer.m; sourceTree = "<group>"; };
 		9C09AF080A6B745E8934BE27 /* Pods-NNetwork_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NNetwork_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-NNetwork_Example/Pods-NNetwork_Example.release.xcconfig"; sourceTree = "<group>"; };
-		C2835AEE107C60E18B287879 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; name = README.md; path = ../README.md; sourceTree = "<group>"; };
-		CEE9E52C6212BF813CEF3265 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
+		C2835AEE107C60E18B287879 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+		CEE9E52C6212BF813CEF3265 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		F7E493AD308C2FEA2611C56D /* Pods_NNetwork_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NNetwork_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -132,6 +144,7 @@
 		6003F593195388D20070C39A /* Example for NNetwork */ = {
 			isa = PBXGroup;
 			children = (
+				9793E54F1FBD3053005BBD13 /* Models */,
 				6003F59C195388D20070C39A /* NNAppDelegate.h */,
 				6003F59D195388D20070C39A /* NNAppDelegate.m */,
 				873B8AEA1B1F5CCA007FD442 /* Main.storyboard */,
@@ -159,7 +172,10 @@
 		6003F5B5195388D20070C39A /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				6003F5BB195388D20070C39A /* Tests.m */,
+				9793E5531FBD326B005BBD13 /* NNURLRequestSpec.m */,
+				974D45351FBD886A005AA102 /* NNURLRequestCacheSpec.m */,
+				9755E4051FBD9366002A53E1 /* NNURLRequestPrivateSpec.m */,
+				9755E40E1FBE7B25002A53E1 /* NNReachabililtySpec.m */,
 				6003F5B6195388D20070C39A /* Supporting Files */,
 			);
 			path = Tests;
@@ -194,6 +210,17 @@
 				0B951337897CECF44A1EC26E /* Pods-NNetwork_Tests.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		9793E54F1FBD3053005BBD13 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				9793E5501FBD3091005BBD13 /* NNTestAgent.h */,
+				9793E5511FBD3091005BBD13 /* NNTestAgent.m */,
+				97983EC11FBD40A60051B34E /* NNTestResponseReformer.h */,
+				97983EC21FBD40A60051B34E /* NNTestResponseReformer.m */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -250,6 +277,9 @@
 				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = ws00801526;
 				TargetAttributes = {
+					6003F589195388D20070C39A = {
+						DevelopmentTeam = N9G92VG962;
+					};
 					6003F5AD195388D20070C39A = {
 						TestTargetID = 6003F589195388D20070C39A;
 					};
@@ -319,11 +349,23 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-NNetwork_Example/Pods-NNetwork_Example-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/AFNetworking/AFNetworking.framework",
+				"${BUILT_PRODUCTS_DIR}/BeeHive/BeeHive.framework",
+				"${BUILT_PRODUCTS_DIR}/CocoaLumberjack/CocoaLumberjack.framework",
+				"${BUILT_PRODUCTS_DIR}/NNCore/NNCore.framework",
 				"${BUILT_PRODUCTS_DIR}/NNetwork/NNetwork.framework",
+				"${BUILT_PRODUCTS_DIR}/YYCache/YYCache.framework",
+				"${BUILT_PRODUCTS_DIR}/YYModel/YYModel.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AFNetworking.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BeeHive.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CocoaLumberjack.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/NNCore.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/NNetwork.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YYCache.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YYModel.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -409,6 +451,8 @@
 				6003F59E195388D20070C39A /* NNAppDelegate.m in Sources */,
 				6003F5A7195388D20070C39A /* NNViewController.m in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,
+				9793E5521FBD3091005BBD13 /* NNTestAgent.m in Sources */,
+				97983EC31FBD40A60051B34E /* NNTestResponseReformer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -416,7 +460,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6003F5BC195388D20070C39A /* Tests.m in Sources */,
+				974D45361FBD886A005AA102 /* NNURLRequestCacheSpec.m in Sources */,
+				9793E5541FBD326B005BBD13 /* NNURLRequestSpec.m in Sources */,
+				9755E40F1FBE7B25002A53E1 /* NNReachabililtySpec.m in Sources */,
+				9755E4061FBD9366002A53E1 /* NNURLRequestPrivateSpec.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -536,6 +583,7 @@
 			baseConfigurationReference = 0E0C85B3118E1D30B726516D /* Pods-NNetwork_Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = N9G92VG962;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NNetwork/NNetwork-Prefix.pch";
 				INFOPLIST_FILE = "NNetwork/NNetwork-Info.plist";
@@ -551,6 +599,7 @@
 			baseConfigurationReference = 9C09AF080A6B745E8934BE27 /* Pods-NNetwork_Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = N9G92VG962;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NNetwork/NNetwork-Prefix.pch";
 				INFOPLIST_FILE = "NNetwork/NNetwork-Info.plist";

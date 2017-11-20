@@ -1,8 +1,9 @@
 use_frameworks!
+inhibit_all_warnings!
 
 target 'NNetwork_Example' do
-  pod 'NNetwork', :path => '../'
-
+  pod 'NNetwork', :path => '../' , :inhibit_warnings => false
+  pod 'NNCore', :path => '../../NNCore'
   target 'NNetwork_Tests' do
     inherit! :search_paths
 
