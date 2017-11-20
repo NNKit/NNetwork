@@ -6,6 +6,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13174"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -21,26 +22,89 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RlP-Ek-CdW">
-                                <rect key="frame" x="166" y="323" width="42" height="21"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Net Status" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RlP-Ek-CdW">
+                                <rect key="frame" x="146.5" y="123" width="81" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="https://picjumbo.imgix.net/HNCK8461.jpg" borderStyle="line" placeholder="下载地址" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="x9x-uZ-d5r">
+                                <rect key="frame" x="31" y="159" width="313" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="TUF-4B-gSJ"/>
+                                </constraints>
+                                <color key="textColor" red="0.1647058824" green="0.37647058820000001" blue="0.81568627449999997" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="download/file/path" borderStyle="line" placeholder="下载路径" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="1gi-tv-L54">
+                                <rect key="frame" x="31" y="224" width="313" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="mS7-ad-bTn"/>
+                                </constraints>
+                                <color key="textColor" red="0.1647058824" green="0.37647058820000001" blue="0.81568627449999997" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6kB-6j-iGE">
+                                <rect key="frame" x="15" y="289" width="165" height="30"/>
+                                <state key="normal" title="Start"/>
+                                <connections>
+                                    <action selector="handleStartDownloadAction:" destination="whP-gf-Uak" eventType="touchUpInside" id="3eA-43-mva"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ueO-GZ-TBv">
+                                <rect key="frame" x="195" y="289" width="165" height="30"/>
+                                <state key="normal" title="Stop"/>
+                                <connections>
+                                    <action selector="handleStopDownloadAction:" destination="whP-gf-Uak" eventType="touchUpInside" id="7ua-2A-ztU"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QGG-I0-405">
+                                <rect key="frame" x="104.5" y="334" width="165" height="30"/>
+                                <state key="normal" title="Pause"/>
+                                <connections>
+                                    <action selector="handlePauseDownloadAction:" destination="whP-gf-Uak" eventType="touchUpInside" id="w2O-Zw-gBj"/>
+                                </connections>
+                            </button>
+                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="weY-dz-3yt">
+                                <rect key="frame" x="31" y="394" width="313" height="2"/>
+                            </progressView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="QGG-I0-405" firstAttribute="top" secondItem="6kB-6j-iGE" secondAttribute="bottom" constant="15" id="8IS-cT-CA0"/>
+                            <constraint firstItem="QGG-I0-405" firstAttribute="centerX" secondItem="TpU-gO-2f1" secondAttribute="centerX" id="Dcq-qq-aEe"/>
                             <constraint firstItem="RlP-Ek-CdW" firstAttribute="centerX" secondItem="TpU-gO-2f1" secondAttribute="centerX" id="Nb8-23-Yp6"/>
-                            <constraint firstItem="RlP-Ek-CdW" firstAttribute="centerY" secondItem="TpU-gO-2f1" secondAttribute="centerY" id="VOa-6J-bsR"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="weY-dz-3yt" secondAttribute="trailing" constant="15" id="Qnq-Yb-yyE"/>
+                            <constraint firstItem="6kB-6j-iGE" firstAttribute="top" secondItem="1gi-tv-L54" secondAttribute="bottom" constant="15" id="SGW-FX-SXH"/>
+                            <constraint firstItem="QGG-I0-405" firstAttribute="width" secondItem="6kB-6j-iGE" secondAttribute="width" id="SNy-xN-DTc"/>
+                            <constraint firstItem="ueO-GZ-TBv" firstAttribute="width" secondItem="6kB-6j-iGE" secondAttribute="width" id="UcH-et-UFa"/>
+                            <constraint firstItem="RlP-Ek-CdW" firstAttribute="centerY" secondItem="TpU-gO-2f1" secondAttribute="centerY" constant="-200" id="VOa-6J-bsR"/>
+                            <constraint firstItem="ueO-GZ-TBv" firstAttribute="leading" secondItem="6kB-6j-iGE" secondAttribute="trailing" constant="15" id="h55-0g-SFK"/>
+                            <constraint firstItem="weY-dz-3yt" firstAttribute="top" secondItem="QGG-I0-405" secondAttribute="bottom" constant="30" id="ie3-UR-pls"/>
+                            <constraint firstAttribute="trailing" secondItem="ueO-GZ-TBv" secondAttribute="trailing" constant="15" id="ip7-Jz-yRG"/>
+                            <constraint firstItem="1gi-tv-L54" firstAttribute="top" secondItem="x9x-uZ-d5r" secondAttribute="bottom" constant="15" id="lJ2-OH-3e7"/>
+                            <constraint firstItem="6kB-6j-iGE" firstAttribute="leading" secondItem="TpU-gO-2f1" secondAttribute="leading" constant="15" id="mwU-Gj-zm4"/>
+                            <constraint firstItem="1gi-tv-L54" firstAttribute="leading" secondItem="TpU-gO-2f1" secondAttribute="leadingMargin" constant="15" id="nXl-qm-i82"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="1gi-tv-L54" secondAttribute="trailing" constant="15" id="o1g-di-dPn"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="x9x-uZ-d5r" secondAttribute="trailing" constant="15" id="oiL-8Z-VCS"/>
+                            <constraint firstItem="weY-dz-3yt" firstAttribute="leading" secondItem="TpU-gO-2f1" secondAttribute="leadingMargin" constant="15" id="rPo-z4-2IQ"/>
+                            <constraint firstItem="ueO-GZ-TBv" firstAttribute="top" secondItem="1gi-tv-L54" secondAttribute="bottom" constant="15" id="rSj-nh-Dr7"/>
+                            <constraint firstItem="x9x-uZ-d5r" firstAttribute="top" secondItem="RlP-Ek-CdW" secondAttribute="bottom" constant="15" id="s6m-WM-FT7"/>
+                            <constraint firstItem="x9x-uZ-d5r" firstAttribute="leading" secondItem="TpU-gO-2f1" secondAttribute="leadingMargin" constant="15" id="wxh-26-KM3"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="downloadPathField" destination="1gi-tv-L54" id="jo1-Ib-XRZ"/>
+                        <outlet property="downloadURLField" destination="x9x-uZ-d5r" id="ZKs-kM-A8M"/>
+                        <outlet property="progressView" destination="weY-dz-3yt" id="gtZ-0q-L6c"/>
                         <outlet property="statusLabel" destination="RlP-Ek-CdW" id="6WE-5J-pKd"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tc2-Qw-aMS" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="304.80000000000001" y="432.23388305847078"/>
+            <point key="canvasLocation" x="-218" y="331"/>
         </scene>
     </scenes>
 </document>

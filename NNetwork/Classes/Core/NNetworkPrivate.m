@@ -6,8 +6,10 @@
 //
 
 #import "NNetworkPrivate.h"
+#import "NNURLRequestAgent.h"
 #import <NNCore/NNCore.h>
 #import <YYCache/YYCache.h>
+#import <AFNetworking/AFNetworking.h>
 
 NSString *const kNNetworkErrorDomain = @"com.XMFraker.NNetwork.Error";
 
@@ -42,6 +44,43 @@ NSString *const kNNetworkErrorDomain = @"com.XMFraker.NNetwork.Error";
 
 @implementation NNURLRequest (NNPrivate)
 
+- (void)cacheResumeData:(nonnull NSData *)resumeData {
+    NSString *cacheKey = [self.agent cacheKeyWithRequest:self];
+    [self.agent.cache setObject:resumeData forKey:cacheKey];
+    NNLogD(@"cache resume data success :%@",[self.agent.cache containsObjectForKey:cacheKey] ? @"Y" : @"N");
+}
+
+- (void)clearCachedResumeData {
+    if (self.downloadPath.length) { [self.agent.cache.diskCache removeObjectForKey:[self.agent cacheKeyWithRequest:self]]; }
+}
+
+- (void)loadResponseObjectFromCacheWithCompletionHandler:(nonnull void(^)(id cachedObject, NSError * error))handler {
+    
+    dispatch_async(self.agent.sessionManager.completionQueue, ^{
+        NSString *cacheKey = [self.agent cacheKeyWithRequest:self];
+        if ([self.agent.cache containsObjectForKey:cacheKey]) {
+            NNURLRequestCacheMeta *cacheMeta = (NNURLRequestCacheMeta *)[self.agent.cache objectForKey:cacheKey];
+            if (!cacheMeta.cachedData) {
+                [self.agent.cache removeObjectForKey:cacheKey];
+                handler(nil, kNNetworkError(NNURLRequestCacheErrorInvaildCacheData, @"缓存数据出错"));
+                NNLogD(@"cache data is invalid");
+            } else if (![cacheMeta.cachedVersion isEqualToString:self.cacheVersion]) {
+                [self.agent.cache removeObjectForKey:cacheKey];
+                handler(nil, kNNetworkError(NNURLRequestCacheErrorVersionMismatch, @"缓存数据版本不符"));
+                NNLogD(@"cache data version is invalid");
+            } else if ([cacheMeta.expiredDate timeIntervalSinceDate:[NSDate date]] <= 0) {
+                [self.agent.cache removeObjectForKey:cacheKey];
+                handler(nil, kNNetworkError(NNURLRequestCacheErrorExpired, @"缓存数据已过期"));
+                NNLogD(@"cache data is expired");
+            } else {
+                handler([cacheMeta.cachedData jsonValueDecoded], nil);
+            }
+        } else {
+            handler(nil, kNNetworkError(NNURLRequestCacheErrorExpired, @"缓存数据不存在"));
+        }
+    });
+}
+
 - (void)requestDidCompletedWithError:(NSError *)error {
 
     self.error = error;
@@ -62,7 +101,9 @@ NSString *const kNNetworkErrorDomain = @"com.XMFraker.NNetwork.Error";
         } else {
             NNLogD(@"request will not cache responseObject");
         }
+        [self clearCachedResumeData];
     }
+    
     
     if (self.ignoredCancelled && self.isCancelled) {
         NNLogD(@"%@ is ignored request", self);

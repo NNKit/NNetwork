@@ -17,6 +17,39 @@ static NNMutableDictionary<NSString *, __kindof NNURLRequestAgent *> *kNNURLRequ
 
 @implementation NNURLRequestAgent
 
+NSURL * NNCreateAbsoluteDownloadPath(NSString * downloadPath) {
+    
+    NSString *dirPath = [[NSSearchPathForDirectoriesInDomains(NSDownloadsDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"com.XMFraker.NNetwork"];
+    
+    NSString *filename = downloadPath;
+    if ([downloadPath componentsSeparatedByString:@"/"].count) {
+        
+        NSArray<NSString *> *prefixDirs = [[downloadPath componentsSeparatedByString:@"/"] subarrayWithRange:NSMakeRange(0, [downloadPath componentsSeparatedByString:@"/"].count - 1)];
+        if (prefixDirs.count) {
+            dirPath = [dirPath stringByAppendingPathComponent:[prefixDirs componentsJoinedByString:@"/"]];
+        }
+        filename = [[downloadPath componentsSeparatedByString:@"/"] lastObject];
+    }
+    
+    BOOL isDir = YES;
+    if (![[NSFileManager defaultManager] fileExistsAtPath:dirPath isDirectory:&isDir] || !isDir) {
+        NNLogD(@"downDir is not exists or is not a dir :%@, will recreate downDir", ((isDir == NO) ? @"YES" : @"NO"));
+        NSError *error = nil;
+        if (!isDir) { [[NSFileManager defaultManager] removeItemAtPath:dirPath error:&error]; }
+        [[NSFileManager defaultManager] createDirectoryAtPath:dirPath withIntermediateDirectories:YES attributes:nil error:&error];
+        NNLogD(@"create dir error :%@", error);
+    }
+    
+    NNLogD(@"downDir is :%@",dirPath);
+    NSString *absolutePath = [dirPath stringByAppendingPathComponent:filename];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:absolutePath]) {
+        NNLogD(@"downPath is exists some object, will remove object");
+        [[NSFileManager defaultManager] removeItemAtPath:absolutePath error:nil];
+    }
+    NNLogD(@"downPath is :%@",absolutePath);
+    return [NSURL fileURLWithPath:absolutePath];
+}
+
 #pragma mark - Life Cycle
 
 + (void)initialize {
@@ -41,7 +74,7 @@ static NNMutableDictionary<NSString *, __kindof NNURLRequestAgent *> *kNNURLRequ
         self.sessionManager.completionQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
         self.requestSerializerType = NNURLRequestSerializerTypeHTTP;
         self.responseSerializerType = NNResponseSerializerTypeHTTP;
-
+        
         if (self.cachePath.length) {
             self.cache = [YYCache cacheWithPath:self.cachePath];
         } else {
@@ -58,7 +91,7 @@ static NNMutableDictionary<NSString *, __kindof NNURLRequestAgent *> *kNNURLRequ
     NSParameterAssert(request != nil);
     NSDictionary *params = nil;
     NSString *URLString = [self absoluteURLStringWithRequest:request params:&params];
-
+    
     AFHTTPRequestSerializer *serializer = self.sessionManager.requestSerializer;
     serializer.allowsCellularAccess = request.allowsCellularAccess;
     serializer.timeoutInterval = request.timeoutInterval;
@@ -66,7 +99,7 @@ static NNMutableDictionary<NSString *, __kindof NNURLRequestAgent *> *kNNURLRequ
         [serializer setAuthorizationHeaderFieldWithUsername:[request.authorizationHeaderFields firstObject]
                                                    password:[request.authorizationHeaderFields lastObject]];
     }
-
+    
     NSError *error;
     __kindof NSURLSessionTask *datatask = nil;
     switch (request.requestMethod) {
@@ -88,7 +121,12 @@ static NNMutableDictionary<NSString *, __kindof NNURLRequestAgent *> *kNNURLRequ
         case NNURLRequestMethodGET:
         {
             if (request.downloadPath.length) {
-                datatask = [self downloadTaskWithDownloadPath:request.downloadPath URLString:URLString params:params progressHandler:request.progressHandler constructingHandler:nil error:&error];
+                NSString *cacheKey = [self cacheKeyWithRequest:request];
+                if ([self.cache.diskCache containsObjectForKey:cacheKey]) {
+                    datatask = [self downloadTaskWithResumeData:(NSData *)[self.cache.diskCache objectForKey:cacheKey] downloadPath:request.downloadPath progressHandler:request.progressHandler];
+                } else {
+                    datatask = [self downloadTaskWithDownloadPath:request.downloadPath URLString:URLString params:params progressHandler:request.progressHandler error:&error];
+                }
             } else {
                 datatask = [self dataTaskWithHTTPMethod:@"GET" URLString:URLString params:params progressHandler:nil constructingHandler:nil error:&error];
             }
@@ -129,28 +167,41 @@ static NNMutableDictionary<NSString *, __kindof NNURLRequestAgent *> *kNNURLRequ
     return task;
 }
 
+
+- (NSURLSessionDownloadTask *)downloadTaskWithResumeData:(nonnull NSData *)resumeData
+                                            downloadPath:(nonnull NSString *)downloadPath
+                                         progressHandler:(nullable NNURLRequestProgressHandler)progressHandler {
+    
+    NSAssert(resumeData, @"resumeData should not be nil");
+    __weak typeof(self) wSelf = self;
+    __block NSURLSessionDownloadTask *downloadTask = [self.sessionManager downloadTaskWithResumeData:resumeData progress:^(NSProgress *progress) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            progressHandler ? progressHandler(progress) : nil;
+        });
+    } destination:^NSURL * _Nonnull(NSURL * _Nonnull targetPath, NSURLResponse * _Nonnull response) {
+        return NNCreateAbsoluteDownloadPath(downloadPath);
+    } completionHandler:^(NSURLResponse * _Nonnull response, NSURL * _Nullable filePath, NSError * _Nullable error) {
+       __strong typeof(wSelf) self = wSelf;
+        [self handleRequestResultWithDatatask:downloadTask responseObject:filePath error:error];
+    }];
+    return downloadTask;
+}
+
+
 - (NSURLSessionDownloadTask *)downloadTaskWithDownloadPath:(nullable NSString *)downloadPath
-                                                 URLString:(nullable NSString *)URLString
+                                                 URLString:(nonnull NSString *)URLString
                                                     params:(nullable NSDictionary *)params
                                            progressHandler:(nullable NNURLRequestProgressHandler)progressHandler
-                                       constructingHandler:(nullable NNURLRequestConstructingHandler)constructingHandler
                                                      error:(NSError * _Nullable __autoreleasing *)error {
     
     __weak typeof(self) wSelf = self;
-    __block NSURLSessionDownloadTask *downloadTask = nil;
-    if (downloadPath.length && [self.cache.diskCache containsObjectForKey:downloadPath.md5String]) {
-        
-        downloadTask = [self.sessionManager downloadTaskWithResumeData:(NSData *)[self.cache.diskCache objectForKey:downloadPath.md5String] progress:progressHandler destination:^NSURL * _Nonnull(NSURL * _Nonnull targetPath, NSURLResponse * _Nonnull response) {
-            return [NSURL fileURLWithPath:downloadPath];
-        } completionHandler:^(NSURLResponse * _Nonnull response, NSURL * _Nullable filePath, NSError * _Nullable error) {
-            __strong typeof(wSelf) self = wSelf;
-            [self handleRequestResultWithDatatask:downloadTask responseObject:filePath error:error];
-        }];
-        return downloadTask;
-    }
     NSMutableURLRequest *request = [self.sessionManager.requestSerializer requestWithMethod:@"GET" URLString:URLString parameters:params error:error];
-    downloadTask = [self.sessionManager downloadTaskWithRequest:request progress:progressHandler destination:^NSURL * _Nonnull(NSURL * _Nonnull targetPath, NSURLResponse * _Nonnull response) {
-        return [NSURL fileURLWithPath:downloadPath];
+    __block NSURLSessionDownloadTask *downloadTask = [self.sessionManager downloadTaskWithRequest:request progress:^(NSProgress *progress) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            progressHandler ? progressHandler(progress) : nil;
+        });
+    } destination:^NSURL * _Nonnull(NSURL * _Nonnull targetPath, NSURLResponse * _Nonnull response) {
+        return NNCreateAbsoluteDownloadPath(downloadPath);
     } completionHandler:^(NSURLResponse * _Nonnull response, NSURL * _Nullable filePath, NSError * _Nullable error) {
         __strong typeof(wSelf) self = wSelf;
         [self handleRequestResultWithDatatask:downloadTask responseObject:filePath error:error];
@@ -186,7 +237,7 @@ static NNMutableDictionary<NSString *, __kindof NNURLRequestAgent *> *kNNURLRequ
     
     [request requestDidCompletedWithError:error];
     [self.requestMappers removeObjectForKey:@(request.datatask.taskIdentifier)];
-
+    
     NNLogD(@"receive responseObject :%@ -- mainThread: %@",responseObject, [NSThread isMainThread] ? @"YES" : @"NO");
 }
 

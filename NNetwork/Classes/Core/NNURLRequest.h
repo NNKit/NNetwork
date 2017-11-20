@@ -156,7 +156,6 @@ typedef void(^NNURLRequestProgressHandler)(NSProgress * progress);
 
 /** 此responseObject 可能是经过responseInterceptor 处理过的responseObject **/
 @property (strong, nonatomic, readonly, nullable) id responseObject;
-
 @property (copy, nonatomic, readonly, nullable)   NSData *responseData;
 @property (copy, nonatomic, readonly, nullable)   NSString *responseString;
 @property (strong, nonatomic, readonly, nullable) id responseJSONObject;
@@ -193,7 +192,7 @@ typedef void(^NNURLRequestProgressHandler)(NSProgress * progress);
  **/
 @property (assign, nonatomic, getter=isAllowsCellularAccess) BOOL allowsCellularAccess;
 
-/** 下载文件的下载地址 */
+/** 下载文件的下载地址 默认存放 ~/Downloads/com.XMFraker.NNetwork + downloadPath */
 @property (copy, nonatomic, nullable)   NSString *downloadPath;
 
 /// ========================================

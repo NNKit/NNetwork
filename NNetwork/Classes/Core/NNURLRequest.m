@@ -52,9 +52,6 @@
     self.interceptor = nil;
     self.paramInterceptor = nil;
     self.responseInterceptor = nil;
-#if DEBUG
-    NSLog(@"%@ is %@ing", self, NSStringFromSelector(_cmd));
-#endif
 }
 
 #pragma mark - Override Methods
@@ -124,58 +121,53 @@
         }
     }
     
+    
     __weak typeof(self) wSelf = self;
-    switch (self.cachePolicy) {
-        case NNURLRequestCachePolicyReturnCacheDataDontLoad:
-        {
-            [self loadReponseObjectFromCacheWithCompletionHandler:^(id cachedObject, NSError *error) {
-                __strong typeof(wSelf) self = wSelf;
-                [self requestDidCompletedWithCachedResponseObject:nil error:error];
-            }];
-        }
-            break;
-        case NNURLRequestCachePolicyReturnCacheDataElseLoad:
-        {
-            [self loadReponseObjectFromCacheWithCompletionHandler:^(id cachedObject, NSError *error) {
-                __strong typeof(wSelf) self = wSelf;
-                if (cachedObject && !error) {
+    if (self.cachePolicy == NSURLRequestReloadIgnoringCacheData || self.downloadPath.length) {
+        // 忽略缓存, 直接加载网络数据
+        dispatch_async(self.agent.sessionManager.completionQueue, ^{
+            __strong typeof(wSelf) self = wSelf;
+            [self.agent startRequest:self];
+        });
+    } else {
+        [self loadResponseObjectFromCacheWithCompletionHandler:^(id  _Nonnull cachedObject, NSError * _Nonnull error) {
+            __strong typeof(wSelf) self = wSelf;
+            switch (self.cachePolicy) {
+                case NNURLRequestCachePolicyReturnCacheDataDontLoad:
                     [self requestDidCompletedWithCachedResponseObject:cachedObject error:error];
-                } else {
-                    [self.agent startRequest:self];
+                    break;
+                case NNURLRequestCachePolicyReturnCacheDataElseLoad:
+                case NNURLRequestCachePolicyReturnAndRefreshCacheData:
+                {
+                    BOOL shouldContinue = YES;
+                    if (cachedObject && !error) {
+                        shouldContinue = self.cachePolicy != NNURLRequestCachePolicyReturnCacheDataElseLoad;
+                        [self requestDidCompletedWithCachedResponseObject:cachedObject error:error];
+                    }
+                    if (shouldContinue) { [self.agent startRequest:self]; }
                 }
-            }];
-        }
-            break;
-        case NNURLRequestCachePolicyReturnAndRefreshCacheData:
-        {
-            [self loadReponseObjectFromCacheWithCompletionHandler:^(id cachedObject, NSError *error) {
-                __strong typeof(wSelf) self = wSelf;
-                [self requestDidCompletedWithCachedResponseObject:cachedObject error:error];
-                [self.agent startRequest:self];
-            }];
-        }
-            break;
-        case NNURLRequestCachePolicyInnoringCacheData:
-        default:
-        {
-            dispatch_async(self.agent.sessionManager.completionQueue, ^{
-                [self.agent startRequest:self];
-            });
-        }
-            break;
+                    break;
+                default:
+                    [self.agent startRequest:self];
+                    break;
+            }
+        }];
     }
 }
 
 - (void)cancelRequest {
 
     [self.datatask cancel];
+    [self clearCachedResumeData];
+    if (self.downloadPath.length) { [self.agent.cache.diskCache removeObjectForKey:[self.agent cacheKeyWithRequest:self]]; }
 }
 
 - (void)suspendRequest {
 
-    if ([self.datatask isMemberOfClass:[NSURLSessionDownloadTask class]] && self.downloadPath.length) {
+    if ([self.datatask isKindOfClass:[NSURLSessionDownloadTask class]] && self.downloadPath.length) {
         __weak typeof(self) wSelf = self;
         [(NSURLSessionDownloadTask *)self.datatask cancelByProducingResumeData:^(NSData * _Nullable resumeData) {
+            __strong typeof(wSelf) self = wSelf;
             dispatch_async(self.agent.sessionManager.completionQueue, ^{
                 __strong typeof(wSelf) self = wSelf;
                 if (resumeData != nil) [self cacheResumeData:resumeData];
@@ -184,39 +176,6 @@
     } else {
         [self cancelRequest];
     }
-}
-
-#pragma mark - Private Methods
-
-- (void)cacheResumeData:(nonnull NSData *)resumeData {
-    [self.agent.cache.diskCache setObject:resumeData forKey:self.downloadPath.md5String];
-}
-
-- (void)loadReponseObjectFromCacheWithCompletionHandler:(nonnull void(^)(id cachedObject, NSError * error))handler {
-    
-    dispatch_async(self.agent.sessionManager.completionQueue, ^{
-        NSString *cacheKey = [self.agent cacheKeyWithRequest:self];
-        if ([self.agent.cache containsObjectForKey:cacheKey]) {
-            NNURLRequestCacheMeta *cacheMeta = (NNURLRequestCacheMeta *)[self.agent.cache objectForKey:cacheKey];
-            if (!cacheMeta.cachedData) {
-                [self.agent.cache removeObjectForKey:cacheKey];
-                handler(nil, kNNetworkError(NNURLRequestCacheErrorInvaildCacheData, @"缓存数据出错"));
-                NNLogD(@"cache data is invalid");
-            } else if (![cacheMeta.cachedVersion isEqualToString:self.cacheVersion]) {
-                [self.agent.cache removeObjectForKey:cacheKey];
-                handler(nil, kNNetworkError(NNURLRequestCacheErrorVersionMismatch, @"缓存数据版本不符"));
-                NNLogD(@"cache data version is invalid");
-            } else if ([cacheMeta.expiredDate timeIntervalSinceDate:[NSDate date]] <= 0) {
-                [self.agent.cache removeObjectForKey:cacheKey];
-                handler(nil, kNNetworkError(NNURLRequestCacheErrorExpired, @"缓存数据已过期"));
-                NNLogD(@"cache data is expired");
-            } else {
-                handler([cacheMeta.cachedData jsonValueDecoded], nil);
-            }
-        } else {
-            handler(nil, kNNetworkError(NNURLRequestCacheErrorExpired, @"缓存数据不存在"));
-        }
-    });
 }
 
 #pragma mark - Getter

@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
   s.name             = 'NNetwork'
   s.version          = '0.1.0'
-  s.summary          = 'A short description of ZYNet.'
+  s.summary          = 'A short description of NNetwork.'
   s.homepage         = 'https://github.com/ws00801526/ZYNet'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'ws00801526' => '3057600441@qq.com' }
@@ -17,6 +17,7 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '8.0'
   s.source_files = 'NNetwork/Classes/**/*'
   s.public_header_files = 'NNetwork/Classes/**/*.h'
+  s.private_header_files = 'NNetwork/Classes/Core/NNetworkPrivate.h'
   s.dependency 'NNCore'
   s.dependency 'YYCache'
   s.dependency 'AFNetworking', '~> 3.0'

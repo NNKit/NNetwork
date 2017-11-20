@@ -72,6 +72,12 @@ describe(@"NNURLRequestPrivate", ^{
             [[cacheKeyWithOutParams shouldNot] equal:cacheKeyWithParams];
             [[cacheKeyWithParams should] equal:cacheKeyWithParams2];
         });
+        
+        it(@"test download path", ^{
+            NSURL *path = NNCreateAbsoluteDownloadPath(@"download/path/file").absoluteString;
+            
+        });
+        
     });
 });
 

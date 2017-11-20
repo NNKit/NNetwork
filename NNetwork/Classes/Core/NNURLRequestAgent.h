@@ -18,6 +18,8 @@ typedef NS_ENUM(NSUInteger, NNURLRequestAgentMode) {
 
 NS_ASSUME_NONNULL_BEGIN
 
+FOUNDATION_EXPORT NSURL * NNCreateAbsoluteDownloadPath(NSString *path);
+
 @class AFSecurityPolicy;
 @interface NNURLRequestAgent : NSObject
 

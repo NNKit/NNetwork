@@ -87,6 +87,10 @@ static CGFloat const kNNURLRequestTimeoutInterval = 20.f;
 @end
 
 @interface NNURLRequest (NNPrivate)
+
+- (void)clearCachedResumeData;
+- (void)cacheResumeData:(nonnull NSData *)resumeData;
+- (void)loadResponseObjectFromCacheWithCompletionHandler:(nonnull void(^)(id cachedObject, NSError * error))handler;
 - (void)requestDidCompletedWithError:(nullable NSError *)error;
 - (void)requestDidCompletedWithCachedResponseObject:(nullable id)cachedResponseObject error:(nullable NSError *)error;
 @end

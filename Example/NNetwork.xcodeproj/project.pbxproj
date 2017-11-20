@@ -25,6 +25,7 @@
 		974D45361FBD886A005AA102 /* NNURLRequestCacheSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 974D45351FBD886A005AA102 /* NNURLRequestCacheSpec.m */; };
 		9755E4061FBD9366002A53E1 /* NNURLRequestPrivateSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 9755E4051FBD9366002A53E1 /* NNURLRequestPrivateSpec.m */; };
 		9755E40F1FBE7B25002A53E1 /* NNReachabililtySpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 9755E40E1FBE7B25002A53E1 /* NNReachabililtySpec.m */; };
+		978659F31FC2B5C4006F1B56 /* NNDownloadAgent.m in Sources */ = {isa = PBXBuildFile; fileRef = 978659F21FC2B5C4006F1B56 /* NNDownloadAgent.m */; };
 		9793E5521FBD3091005BBD13 /* NNTestAgent.m in Sources */ = {isa = PBXBuildFile; fileRef = 9793E5511FBD3091005BBD13 /* NNTestAgent.m */; };
 		9793E5541FBD326B005BBD13 /* NNURLRequestSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 9793E5531FBD326B005BBD13 /* NNURLRequestSpec.m */; };
 		97983EC31FBD40A60051B34E /* NNTestResponseReformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 97983EC21FBD40A60051B34E /* NNTestResponseReformer.m */; };
@@ -70,6 +71,8 @@
 		974D45351FBD886A005AA102 /* NNURLRequestCacheSpec.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NNURLRequestCacheSpec.m; sourceTree = "<group>"; };
 		9755E4051FBD9366002A53E1 /* NNURLRequestPrivateSpec.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NNURLRequestPrivateSpec.m; sourceTree = "<group>"; };
 		9755E40E1FBE7B25002A53E1 /* NNReachabililtySpec.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NNReachabililtySpec.m; sourceTree = "<group>"; };
+		978659F11FC2B5C4006F1B56 /* NNDownloadAgent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NNDownloadAgent.h; sourceTree = "<group>"; };
+		978659F21FC2B5C4006F1B56 /* NNDownloadAgent.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NNDownloadAgent.m; sourceTree = "<group>"; };
 		9793E5501FBD3091005BBD13 /* NNTestAgent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NNTestAgent.h; sourceTree = "<group>"; };
 		9793E5511FBD3091005BBD13 /* NNTestAgent.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NNTestAgent.m; sourceTree = "<group>"; };
 		9793E5531FBD326B005BBD13 /* NNURLRequestSpec.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NNURLRequestSpec.m; sourceTree = "<group>"; };
@@ -217,6 +220,8 @@
 			children = (
 				9793E5501FBD3091005BBD13 /* NNTestAgent.h */,
 				9793E5511FBD3091005BBD13 /* NNTestAgent.m */,
+				978659F11FC2B5C4006F1B56 /* NNDownloadAgent.h */,
+				978659F21FC2B5C4006F1B56 /* NNDownloadAgent.m */,
 				97983EC11FBD40A60051B34E /* NNTestResponseReformer.h */,
 				97983EC21FBD40A60051B34E /* NNTestResponseReformer.m */,
 			);
@@ -279,6 +284,11 @@
 				TargetAttributes = {
 					6003F589195388D20070C39A = {
 						DevelopmentTeam = N9G92VG962;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
 					};
 					6003F5AD195388D20070C39A = {
 						TestTargetID = 6003F589195388D20070C39A;
@@ -451,6 +461,7 @@
 				6003F59E195388D20070C39A /* NNAppDelegate.m in Sources */,
 				6003F5A7195388D20070C39A /* NNViewController.m in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,
+				978659F31FC2B5C4006F1B56 /* NNDownloadAgent.m in Sources */,
 				9793E5521FBD3091005BBD13 /* NNTestAgent.m in Sources */,
 				97983EC31FBD40A60051B34E /* NNTestResponseReformer.m in Sources */,
 			);
