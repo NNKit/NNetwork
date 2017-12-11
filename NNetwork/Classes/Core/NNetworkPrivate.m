@@ -104,7 +104,7 @@ NSString *const kNNetworkErrorDomain = @"com.XMFraker.NNetwork.Error";
         [self clearCachedResumeData];
     }
     
-    
+    self.fromCache = NO;
     if (self.ignoredCancelled && self.isCancelled) {
         NNLogD(@"%@ is ignored request", self);
         return;

@@ -88,10 +88,34 @@ static CGFloat const kNNURLRequestTimeoutInterval = 20.f;
 
 @interface NNURLRequest (NNPrivate)
 
+/** 清除已经缓存的 下载数据 */
 - (void)clearCachedResumeData;
+
+
+/**
+ 缓存下载数据, 以备继续下载
+
+ @param resumeData 已经下载的数据
+ */
 - (void)cacheResumeData:(nonnull NSData *)resumeData;
+
 - (void)loadResponseObjectFromCacheWithCompletionHandler:(nonnull void(^)(id cachedObject, NSError * error))handler;
+
+/**
+ 请求完成后调用
+ 
+ @discussion  dataTask 请求完成后回调
+ @param error 错误信息
+ */
 - (void)requestDidCompletedWithError:(nullable NSError *)error;
+
+/**
+ 从缓存中获取正确缓存数据后回调
+ 
+ @discussion  从缓存中获取数据后回到
+ @param cachedResponseObject 缓存数据
+ @param error 错误信息
+ */
 - (void)requestDidCompletedWithCachedResponseObject:(nullable id)cachedResponseObject error:(nullable NSError *)error;
 @end
 
