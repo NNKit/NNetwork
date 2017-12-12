@@ -68,12 +68,13 @@ static void NNReachabliltyCallback(SCNetworkReachabilityRef target, SCNetworkRea
 }
 
 - (instancetype)initWithRef:(SCNetworkReachabilityRef)ref {
+    
     if (!ref) return nil;
     if (self = [super init]) {
-        self.ref = ref;
-        self.allowsWWAN = YES;
+        _ref = ref;
+        _allowsWWAN = YES;
         if (NSFoundationVersionNumber >= NSFoundationVersionNumber_iOS_7_0) {
-            self.netinfo = [CTTelephonyNetworkInfo new];
+            _netinfo = [CTTelephonyNetworkInfo new];
         }
     }
     return self;

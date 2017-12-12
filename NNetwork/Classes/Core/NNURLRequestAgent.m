@@ -68,10 +68,10 @@ NSURL * NNCreateAbsoluteDownloadPath(NSString * downloadPath) {
     
     if (self = [super init]) {
         
-        self.requestMappers = [NNMutableDictionary dictionary];
-        self.sessionManager = [[AFHTTPSessionManager alloc] initWithBaseURL:nil sessionConfiguration:configuration ? : [NSURLSessionConfiguration defaultSessionConfiguration]];
-        self.sessionManager.session.configuration.HTTPMaximumConnectionsPerHost = 4;
-        self.sessionManager.completionQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+        _requestMappers = [NNMutableDictionary dictionary];
+        _sessionManager = [[AFHTTPSessionManager alloc] initWithBaseURL:nil sessionConfiguration:configuration ? : [NSURLSessionConfiguration defaultSessionConfiguration]];
+        _sessionManager.session.configuration.HTTPMaximumConnectionsPerHost = 4;
+        _sessionManager.completionQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
         self.requestSerializerType = NNURLRequestSerializerTypeHTTP;
         self.responseSerializerType = NNResponseSerializerTypeHTTP;
         
@@ -215,10 +215,7 @@ NSURL * NNCreateAbsoluteDownloadPath(NSString * downloadPath) {
                                   error:(nullable NSError *)error {
     
     NNURLRequest *request = [self.requestMappers safeObjectForKey:@(datatask.taskIdentifier)];
-    if (!request) {
-        // 此处选择忽略所有不存在请求
-        return;
-    }
+    if (request == nil) return; // 此处选择忽略所有不存在请求
     
     if ([responseObject isKindOfClass:[NSData class]]) {
         request.responseObject = request.responseData = responseObject;

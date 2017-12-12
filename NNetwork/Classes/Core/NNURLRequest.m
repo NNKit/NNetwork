@@ -21,13 +21,14 @@
 - (instancetype)init {
     
     if (self = [super init]) {
-        self.priority = NSURLSessionTaskPriorityDefault;
-        self.requestMethod = NNURLRequestMethodGET;
-        self.cachePolicy = NSURLRequestReloadIgnoringCacheData;
-        self.cacheTime = -1.f;
-        self.timeoutInterval = kNNURLRequestTimeoutInterval;
-        self.userInfo = nil;
-        self.ignoredCancelled = YES;
+        
+        _priority = NSURLSessionTaskPriorityDefault;
+        _requestMethod = NNURLRequestMethodGET;
+        _cachePolicy = NNURLRequestCachePolicyInnoringCacheData;
+        _cacheTime = -1.f;
+        _timeoutInterval = kNNURLRequestTimeoutInterval;
+        _userInfo = nil;
+        _ignoredCancelled = YES;
     }
     return self;
 }
@@ -38,9 +39,9 @@
     
     if (self = [super init]) {
      
-        self.requestPath = requestPath;
-        self.serviceIdentifier = identifier;
-        self.requestMethod = requestMethod;
+        _requestPath = requestPath;
+        _serviceIdentifier = identifier;
+        _requestMethod = requestMethod;
     }
     return self;
 }
@@ -70,6 +71,7 @@
     if (self.requestParams.count) {
         [desc appendFormat:@"{ params: %@ } ", self.requestParams];
     }
+    
     if (self.error) {
         [desc appendFormat:@"{ error: %@ } ", self.error];
     }
@@ -107,12 +109,11 @@
         [requestParams removeAllObjects];
         [requestParams addEntriesFromDictionary:signedParams ? : @{}];
     }
-
-    self.requestParams = [requestParams copy];
-    if (completionHandler) {
-        self.completionHandler = completionHandler;
-    }
     
+    self.requestParams = [requestParams copy];
+    if (completionHandler) self.completionHandler = completionHandler;
+    
+    // 处理用户是否拦截对应请求
     if (self.interceptor && [self.interceptor respondsToSelector:@selector(request:shouldContinueWithParams:)]) {
         BOOL shouldContinue = [self.interceptor request:self shouldContinueWithParams:requestParams];
         if (!shouldContinue) {
@@ -120,7 +121,6 @@
             return;
         }
     }
-    
     
     __weak typeof(self) wSelf = self;
     if (self.cachePolicy == NSURLRequestReloadIgnoringCacheData || self.downloadPath.length) {
@@ -144,7 +144,7 @@
                         shouldContinue = self.cachePolicy != NNURLRequestCachePolicyReturnCacheDataElseLoad;
                         [self requestDidCompletedWithCachedResponseObject:cachedObject error:error];
                     }
-                    if (shouldContinue) { [self.agent startRequest:self]; }
+                    if (shouldContinue) [self.agent startRequest:self];
                 }
                     break;
                 default:
@@ -159,7 +159,7 @@
 
     [self.datatask cancel];
     [self clearCachedResumeData];
-    if (self.downloadPath.length) { [self.agent.cache.diskCache removeObjectForKey:[self.agent cacheKeyWithRequest:self]]; }
+    if (self.downloadPath.length) [self.agent.cache.diskCache removeObjectForKey:[self.agent cacheKeyWithRequest:self]];
 }
 
 - (void)suspendRequest {
@@ -201,15 +201,23 @@
 }
 
 - (BOOL)isExecuting {
-    if (self.datatask) { return self.datatask.state == NSURLSessionTaskStateRunning; }
-    else return NO;
+
+    if (self.datatask != nil && self.datatask.state == NSURLSessionTaskStateRunning) {
+        return YES;
+    } else {
+        return NO;
+    }
 }
 
 - (BOOL)isCancelled {
     
-    if (self.error && self.error.code == NSURLErrorCancelled) { return YES; }
-    else if (self.datatask && self.datatask.state == NSURLSessionTaskStateCanceling) { return YES; }
-    else return NO;
+    if (self.error != nil && self.error.code == NSURLErrorCancelled) {
+        return YES;
+    } else if (self.datatask != nil && self.datatask.state == NSURLSessionTaskStateCanceling) {
+        return YES;
+    } else {
+        return NO;
+    }
 }
 
 - (BOOL)isAllowsCellularAccess {

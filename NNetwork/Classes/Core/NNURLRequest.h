@@ -208,14 +208,37 @@ typedef void(^NNURLRequestProgressHandler)(NSProgress * progress);
 
 #pragma mark - Life Cycle
 
+/**
+ 实例化NNURLRequest
+
+ @param identifier      NNURLRequestAgent.serviceIdentifier
+ @param requestPath     NNURLRequest.requestPath
+ @param requestMethod   NNURLRequest.requestMethod
+ @return NNURLRequest
+ */
 - (instancetype)initWithServiceIdentifier:(NSString *)identifier
                               requestPath:(NSString *)requestPath
                             requestMethod:(NNURLRequestMethod)requestMethod;
 
 #pragma mark - Request Method
 
+/** 开始请求 */
 - (void)startRequest;
+
+/**
+ 开始请求
+
+ @param params 请求参数
+ */
 - (void)startRequestWithParams:(nullable NSDictionary *)params;
+
+
+/**
+ 开始请求
+
+ @param params 请求参数
+ @param completionHandler 请求完成回调
+ */
 - (void)startRequestWithParams:(nullable NSDictionary *)params
              completionHandler:(nullable NNURLRequestCompletionHandler)completionHandler;
 

@@ -24,10 +24,10 @@ NSString *const kNNetworkErrorDomain = @"com.XMFraker.NNetwork.Error";
     
     if (self = [super init]) {
 
-        self.cachedResponseHeaders = request.responseHeaders;
-        self.cachedData = [request.responseObject yy_modelToJSONData];
-        self.cachedVersion = request.cacheVersion;
-        self.expiredDate = [NSDate dateWithTimeIntervalSinceNow:request.cacheTime];
+        _cachedResponseHeaders = request.responseHeaders;
+        _cachedData = [request.responseObject yy_modelToJSONData];
+        _cachedVersion = request.cacheVersion;
+        _expiredDate = [NSDate dateWithTimeIntervalSinceNow:request.cacheTime];
     }
     return self;
 }

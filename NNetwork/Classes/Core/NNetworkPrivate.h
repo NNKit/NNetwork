@@ -82,7 +82,23 @@ static CGFloat const kNNURLRequestTimeoutInterval = 20.f;
 @end
     
 @interface NNURLRequestAgent (NNPrivate)
+
+
+/**
+ 获取request的绝对请求路径
+
+ @param request NNURLRequest实例
+ @param params  NNURLRequest请求参数
+ @return NSString
+ */
 - (NSString *)absoluteURLStringWithRequest:(__kindof NNURLRequest *)request params:(NSDictionary * _Nullable * _Nullable)params;
+
+/**
+ 获取对应request的cacheKey
+
+ @param request 需要获取cacheKey的request
+ @return NSString
+ */
 - (NSString *)cacheKeyWithRequest:(__kindof NNURLRequest *)request;
 @end
 
@@ -99,6 +115,12 @@ static CGFloat const kNNURLRequestTimeoutInterval = 20.f;
  */
 - (void)cacheResumeData:(nonnull NSData *)resumeData;
 
+
+/**
+ 获取对应的缓存数据
+
+ @param handler 成功回调
+ */
 - (void)loadResponseObjectFromCacheWithCompletionHandler:(nonnull void(^)(id cachedObject, NSError * error))handler;
 
 /**
